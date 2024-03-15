@@ -1,13 +1,9 @@
 # Azure subscription vars
-subscription_id = ""
-client_id = ""
-client_secret = ""
-tenant_id = ""
 
 # Resource Group/Location
-location = ""
-resource_group_name = ""
-application_type = ""
+location = "Southeast Asia"
+resource_group_name = "Udacity"
+application_type = "myApplication"
 
 # Network
 virtual_network_name = ""

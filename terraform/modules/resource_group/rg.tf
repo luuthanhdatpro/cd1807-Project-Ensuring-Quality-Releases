@@ -1,4 +1,7 @@
 resource "azurerm_resource_group" "test" {
-  name     = "${var.resource_group}"
+  name     = "${var.resource_group_name}"
   location = "${var.location}"
+  tags = {
+    env        = "dev"
+  }
 }

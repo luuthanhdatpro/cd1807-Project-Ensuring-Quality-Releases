@@ -203,7 +203,7 @@ stages:
           - task: CmdLine@2
             inputs:
               script: |
-                wget "https://apache.mirrors.lucidnetworks.net//jmeter/binaries/apache-jmeter-5.2.1.tgz"
+                wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
                 tar -xf apache-jmeter-5.2.1.tgz
                 unzip -o $(Build.BuildId)-perftests.zip
                 ./apache-jmeter-5.2.1/bin/jmeter -n -t PerformanceTestSuite.jmx -j jmeter.log -f
@@ -218,7 +218,7 @@ stages:
     environment:
       name: test-vm        # ToDo: Change/provide a name
       resourceType: VirtualMachine
-      tags: selenium
+      tags: ${{variables['Build.DefinitionName']}}
     strategy:
       runOnce:
         deploy:
@@ -254,5 +254,6 @@ stages:
                 fi
                 export PATH=$PATH:/home/testuser/app
                 echo "Starting Selenium Tests"
+                python3 login.py >> selenium.log
                 python3 add_remove_from_cart.py >> selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."

@@ -12,7 +12,7 @@ resource "azurerm_network_interface" "vm_nic" {
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "linux-vm"
+  name                = "test-vm"
   location            = "${var.location}"
   resource_group_name = "${var.resource_group_name}"
   size                = "Standard_DS2_v2"

@@ -28,7 +28,7 @@ stages:
     - task: TerraformInstaller@1
       displayName: 'Terrafom installation'
       inputs:
-        terraformVersion: '1.5.6'
+        terraformVersion: latest
     
     # Run Terraform Init on the pipeline agent 
     # ToDo: Replace the resource group name, storage account name, and container name below

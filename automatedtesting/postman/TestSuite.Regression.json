@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "968b3a18-cc72-48a2-9b6b-e8619b4aaca8",
+		"_postman_id": "074968db-8ed2-45c8-a897-518cd88a9020",
 		"name": "Starter APIs",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -11,7 +11,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "af3cb111-e3ac-4174-b8ca-7f4127a0285d",
 						"exec": [
 							"pm.test(\"Successful response\", function () {",
 							"    pm.expect(pm.response.text()).to.include(\"success\");",
@@ -42,6 +41,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }

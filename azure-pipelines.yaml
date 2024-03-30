@@ -197,7 +197,7 @@ stages:
               azureSubscription: '$(azureServiceConnectionId)'    # ToDo
               appName: 'myApplication-AppService-2308'               # ToDo
               appType: webApp
-              package: $(Pipeline.Workspace)/$(Build.BuildId)-fakerestapi.zip       # ToDo: Use the published zip artifact. 
+              package: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-fakerestapi.zip       # ToDo: Use the published zip artifact. 
           #--------------------------------------------#    
           # Run JMeter test suite against the App Service
           - task: CmdLine@2
@@ -208,7 +208,7 @@ stages:
                 unzip -o $(Build.BuildId)-perftests.zip
                 ./apache-jmeter-5.2.1/bin/jmeter -n -t PerformanceTestSuite.jmx -j jmeter.log -f
                 cat jmeter.log                                                                           # ToDo: Write your commands
-              workingDirectory: $(Pipeline.Workspace)/$(Build.BuildId)-perftests            # ToDo: Use the artifact name from the task above
+              workingDirectory: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-perftests            # ToDo: Use the artifact name from the task above
               
 #   #--------------------------------------------#  
 #   # Selenium | Functional UI Tests

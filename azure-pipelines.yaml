@@ -41,7 +41,7 @@ stages:
       displayName: 'Terrafom init'
       inputs:
         provider: 'azurerm'
-        command: 'pull'
+        command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
         backendServiceArm: '$(azureServiceConnectionId)'
         backendAzureRmResourceGroupName: ''
@@ -247,6 +247,13 @@ stages:
         backendAzureRmStorageAccountName: ''
         backendAzureRmContainerName: ''
         backendAzureRmKey: 'test.terraform.tfstate'
+    - task: TerraformTaskV3@3
+      displayName: Terraform pull
+      inputs:
+        provider: 'azurerm'
+        command: 'pull'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'  
     - task: TerraformTaskV3@3
       displayName: Terraform destroy
       inputs:

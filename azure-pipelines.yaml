@@ -169,30 +169,30 @@ stages:
       displayName: 'Upload Package'
       artifact: drop-perftests
 
-- stage: Clean_Up_if_fail
-  dependsOn: Build
-  condition: failed()
-  jobs:
-  - job: CleanUp
-    steps:
-    - task: TerraformCLI@0
-      displayName: 'Terrafom init'
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-        backendServiceArm: '$(azureServiceConnectionId)'
-        backendAzureRmResourceGroupName: ''
-        backendAzureRmStorageAccountName: ''
-        backendAzureRmContainerName: ''
-        backendAzureRmKey: 'test.terraform.tfstate'
-    - task: TerraformTaskV3@3
-      displayName: Terraform destroy
-      inputs:
-        provider: 'azurerm'
-        command: 'destroy'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
+# - stage: Clean_Up_if_fail
+#   dependsOn: Build
+#   condition: failed()
+#   jobs:
+#   - job: CleanUp
+#     steps:
+#     - task: TerraformCLI@0
+#       displayName: 'Terrafom init'
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+#         backendServiceArm: '$(azureServiceConnectionId)'
+#         backendAzureRmResourceGroupName: ''
+#         backendAzureRmStorageAccountName: ''
+#         backendAzureRmContainerName: ''
+#         backendAzureRmKey: 'test.terraform.tfstate'
+#     - task: TerraformTaskV3@3
+#       displayName: Terraform destroy
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'destroy'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+#         environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
 
 #--------------------------------------------#  
 # DEPLOYMENT STAGE

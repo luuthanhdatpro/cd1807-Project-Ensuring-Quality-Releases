@@ -168,7 +168,23 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-perftests.zip
       displayName: 'Upload Package'
       artifact: drop-perftests
-  
+      
+- stage: Clean Up if fail
+  dependsOn: Build
+  condition: failed
+  jobs:
+  - job: CleanUp
+    dependsOn: FakeRestAPI
+    condition: failed('FakeRestAPI')
+    steps:
+    - task: TerraformTaskV3@3
+      displayName: Terraform destroy
+      inputs:
+        provider: 'azurerm'
+        command: 'destroy'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
+
 #--------------------------------------------#  
 # DEPLOYMENT STAGE
 #--------------------------------------------#    

@@ -175,6 +175,17 @@ stages:
   jobs:
   - job: CleanUp
     steps:
+    - task: TerraformCLI@0
+      displayName: 'Terrafom init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        backendServiceArm: '$(azureServiceConnectionId)'
+        backendAzureRmResourceGroupName: ''
+        backendAzureRmStorageAccountName: ''
+        backendAzureRmContainerName: ''
+        backendAzureRmKey: 'test.terraform.tfstate'
     - task: TerraformTaskV3@3
       displayName: Terraform destroy
       inputs:
@@ -221,6 +232,17 @@ stages:
     dependsOn: FakeRestAPI
     condition: failed('FakeRestAPI')
     steps:
+    - task: TerraformCLI@0
+      displayName: 'Terrafom init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+        backendServiceArm: '$(azureServiceConnectionId)'
+        backendAzureRmResourceGroupName: ''
+        backendAzureRmStorageAccountName: ''
+        backendAzureRmContainerName: ''
+        backendAzureRmKey: 'test.terraform.tfstate'
     - task: TerraformTaskV3@3
       displayName: Terraform destroy
       inputs:

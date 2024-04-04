@@ -168,10 +168,10 @@ stages:
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-perftests.zip
       displayName: 'Upload Package'
       artifact: drop-perftests
-      
+
 - stage: Clean Up if fail
   dependsOn: Build
-  condition: failed
+  condition: failed()
   jobs:
   - job: CleanUp
     dependsOn: FakeRestAPI

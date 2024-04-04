@@ -232,6 +232,10 @@ stages:
     dependsOn: FakeRestAPI
     condition: failed('FakeRestAPI')
     steps:
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
+      displayName: 'Terrafom installation'
+      inputs:
+        terraformVersion: '1.2.9'
     - task: TerraformCLI@0
       displayName: 'Terrafom init'
       inputs:

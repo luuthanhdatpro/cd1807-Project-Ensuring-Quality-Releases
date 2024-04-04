@@ -169,7 +169,7 @@ stages:
       displayName: 'Upload Package'
       artifact: drop-perftests
 
-- stage: Clean Up if fail
+- stage: Clean_Up_if_fail
   dependsOn: Build
   condition: failed()
   jobs:

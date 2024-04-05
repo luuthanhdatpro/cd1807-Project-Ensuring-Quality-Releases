@@ -1,7 +1,7 @@
 # #!/usr/bin/env python
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-
+from selenium.webdriver.common.by import By
 
 # Start the browser and login with standard_user
 def login (user, password):
@@ -35,7 +35,7 @@ def remove_from_cart(driver, items):
     for btns in remove_btns[:2]:
         btns.click()
     print ('Removed 6 items from cart ...')
-if __name__ = "__main__":
+if __name__ == "__main__":
     items = 6
     driver = login('standard_user', 'secret_sauce')
     add_to_cart(driver, items)

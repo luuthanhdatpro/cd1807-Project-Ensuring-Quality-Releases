@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 
 from time import sleep
 
+def add_cart()
 # Set options for not prompting DevTools information
 options = Options()
 options.add_experimental_option("excludeSwitches", ["enable-logging"])

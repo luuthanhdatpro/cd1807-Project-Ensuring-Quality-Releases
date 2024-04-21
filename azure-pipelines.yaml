@@ -102,37 +102,7 @@ stages:
 
 #--------------------------------------------#    
     # Postman - Install Newman    
-    # ToDo: Update the command and verify the working directory
-    - task: CmdLine@2
-      displayName: Install Newman
-      inputs:
-        script: 'sudo npm install -g newman'
-        workingDirectory: $(System.DefaultWorkingDirectory)
-    # Postman Data Validation Test Suite    
-    # ToDo: Verify the working directory
-    - task: CmdLine@2
-      displayName: Run Data Validation Tests
-      continueOnError: true
-      inputs:
-        script: 'newman run TestSuite.Data-Validation.json -e Test.environment.json --reporters cli,junit --reporter-junit-export TEST-DataValidation.xml'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
-    # Postman Regression Test Suite    
-    # ToDo: Verify the working directory
-    - task: CmdLine@2
-      displayName: Run Regression Tests
-      continueOnError: true
-      inputs:
-        script: 'newman run TestSuite.Regression.json -e Test.environment.json --reporters cli,junit --reporter-junit-export TEST-Regression.xml'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
-    # Postman - Publish Results 
-    # ToDo: Complete the task as explained here: https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-test-results?view=azure-devops&tabs=trx%2Cyaml#yaml-snippet
-    - task: PublishTestResults@2
-      inputs:
-        testResultsFormat: 'JUnit'
-        testResultsFiles: '**/TEST-*.xml'
-        searchFolder:       # ToDo
-        mergeTestResults: true
-        testRunTitle:       # ToDo
+
 
     #--------------------------------------------#
     # Selenium (UI) Test Suite - Archive the package  
@@ -227,19 +197,57 @@ stages:
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip       # ToDo: Use the published zip artifact. 
               deploymentMethod: zipDeploy
-          #--------------------------------------------#    
-          # Run JMeter test suite against the App Service
-          - task: CmdLine@2
-            inputs:
-              script: |
-                wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
-                tar -xf apache-jmeter-5.6.3.tgz
-                unzip -o $(Build.BuildId)-perftests.zip
-                ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/EnduranceTest.jmx -j jmeter-endurance-test.log -f
-                ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/StressTest.jmx -j jmeter-stress-test.log -f
-                cat jmeter.log                                                                           # ToDo: Write your commands
-              workingDirectory: $(Pipeline.Workspace)/drop-perftests            # ToDo: Use the artifact name from the task above
 
+- stage: test
+  jobs:
+  - job: APIs_Testing
+    displayName: Test API on webapp
+    steps:
+          # ToDo: Update the command and verify the working directory
+    - task: CmdLine@2
+      displayName: Install Newman
+      inputs:
+        script: 'sudo npm install -g newman'
+        workingDirectory: $(System.DefaultWorkingDirectory)
+  # Postman Data Validation Test Suite    
+  # ToDo: Verify the working directory
+    - task: CmdLine@2
+      displayName: Run Data Validation Tests
+      continueOnError: true
+      inputs:
+        script: 'newman run TestSuite.Data-Validation.json -e Test.environment.json --reporters cli,junit --reporter-junit-export TEST-DataValidation.xml'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+  # Postman Regression Test Suite    
+  # ToDo: Verify the working directory
+    - task: CmdLine@2
+      displayName: Run Regression Tests
+      continueOnError: true
+      inputs:
+        script: 'newman run TestSuite.Regression.json -e Test.environment.json --reporters cli,junit --reporter-junit-export TEST-Regression.xml'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/automatedtesting/postman'
+  # Postman - Publish Results 
+  # ToDo: Complete the task as explained here: https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/test/publish-test-results?view=azure-devops&tabs=trx%2Cyaml#yaml-snippet
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/TEST-*.xml'
+        searchFolder: automatedtesting/postman      # ToDo
+        mergeTestResults: true
+        testRunTitle: Publish test results     # ToDo
+  
+  - job: Performance-Testing
+    displayName: JMeter Tests
+    steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
+            tar -xf apache-jmeter-5.6.3.tgz
+            unzip -o $(Build.BuildId)-perftests.zip
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/EnduranceTest.jmx -j jmeter-endurance-test.log -f
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/StressTest.jmx -j jmeter-stress-test.log -f
+          workingDirectory: $(Pipeline.Workspace)/drop-perftests
+        
 #   #--------------------------------------------#  
   # Selenium | Functional UI Tests
   # ToDo: 
@@ -289,27 +297,5 @@ stages:
                 export PATH=$PATH:/home/devopsagent/app
                 echo "Starting Selenium Tests"
                 python3 add_remove_from_cart.py > selenium.log
+                cat selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."
-
-  - job: CleanUp
-    dependsOn: VMDeploy
-    condition: failed('VMDeploy')
-    steps:
-    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-      displayName: 'Terrafom installation'
-      inputs:
-        terraformVersion: '1.2.9'
-    - task: CmdLine@2
-      inputs:
-        script: |
-          unzip -o $(Build.BuildId)-tfstate.zip
-                # ToDo: Write your commands
-        workingDirectory: $(Pipeline.Workspace)/drop-tfstate     
-    - task: TerraformTaskV3@3
-      displayName: Terraform destroy
-      inputs:
-        provider: 'azurerm'
-        command: 'destroy'
-        workingDirectory: '$(Pipeline.Workspace)/drop-tfstate/$(Build.BuildId)-tfstate'
-        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'   
-        

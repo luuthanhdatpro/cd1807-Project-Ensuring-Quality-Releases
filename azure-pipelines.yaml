@@ -243,9 +243,10 @@ stages:
           script: |
             wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
             mkdir -p log/jmeter
+            mkdir -p log/jmeter/html-report
             tar -xf apache-jmeter-5.6.3.tgz
-            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTest.jmx -j log/jmeter/jmeter-endurance-test.log -f -e -o log/jmeter/html-report
-            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTest.jmx -j log/jmeter/jmeter-stress-test.log -f -e -o log/jmeter/html-report
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTest.jmx -j log/jmeter/jmeter-endurance-test.log -f -e -o log/jmeter/html-report -l log/jmeter/stress-endurance-result.csv
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTest.jmx -j log/jmeter/jmeter-stress-test.log -f -e -o log/jmeter/html-report -l log/jmeter/stress-test-result.csv
           workingDirectory: $(System.DefaultWorkingDirectory)
       - task: ArchiveFiles@2
         displayName: Save JMeter test report to artifact
@@ -296,7 +297,7 @@ stages:
                 echo "Starting Selenium Tests"
                 rm -rf /var/log/selenium
                 sudo mkdir -p /var/log/selenium
-                sudo chmod 777 /var/log/seleniums
+                sudo chmod 777 /var/log/selenium
                 python3 login.py 2>&1 | sudo tee -a /var/log/selenium/selenium.log
                 cd $(System.DefaultWorkingDirectory)
                 rm -rf log/selenium

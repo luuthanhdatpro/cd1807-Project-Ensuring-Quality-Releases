@@ -30,30 +30,30 @@ stages:
     #--------------------------------------------#  
     # Use Terraform to create the Infrastructure      
     # Install Terraform on the pipeline agent 
-    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
-      displayName: 'Terrafom installation'
-      inputs:
-        terraformVersion: '1.2.9'
+    # - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
+    #   displayName: 'Terrafom installation'
+    #   inputs:
+    #     terraformVersion: '1.2.9'
     
     # Run Terraform Init on the pipeline agent 
     # ToDo: Replace the resource group name, storage account name, and container name below
-    - task: TerraformCLI@0
-      displayName: 'Terrafom init'
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-        backendServiceArm: '$(azureServiceConnectionId)'
-        backendAzureRmResourceGroupName: ''
-        backendAzureRmStorageAccountName: ''
-        backendAzureRmContainerName: ''
-        backendAzureRmKey: 'test.terraform.tfstate'
+    # - task: TerraformCLI@0
+    #   displayName: 'Terrafom init'
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'init'
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+    #     backendServiceArm: '$(azureServiceConnectionId)'
+    #     backendAzureRmResourceGroupName: ''
+    #     backendAzureRmStorageAccountName: ''
+    #     backendAzureRmContainerName: ''
+    #     backendAzureRmKey: 'test.terraform.tfstate'
 
-    - task: TerraformTaskV3@3
-      displayName: Terraform validate
-      inputs:
-        provider: 'azurerm'
-        command: 'validate'
+    # - task: TerraformTaskV3@3
+    #   displayName: Terraform validate
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'validate'
 
     # OPTIONAL - This step is needed only if your Terraform VM uses an SSH key pair for login and you want your pipeline agent to connect to it. 
     # Generate an SSH key pair in your local/AZ Cloud shell. Use the public key in the Terraform VM module. 
@@ -73,20 +73,20 @@ stages:
 
     
     # Run Terraform Apply
-    - task: TerraformTaskV3@3
-      displayName: Terraform apply
-      inputs:
-        provider: 'azurerm'
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-        environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
-    - task: ArchiveFiles@2
-      displayName: 'Archive Terraform State'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-tfstate.zip'
+    # - task: TerraformTaskV3@3
+    #   displayName: Terraform apply
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'apply'
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+    #     environmentServiceNameAzureRM: '$(azureServiceConnectionId)'
+    # - task: ArchiveFiles@2
+    #   displayName: 'Archive Terraform State'
+    #   inputs:
+    #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)/terraform/environments/test'
+    #     includeRootFolder: false
+    #     archiveType: 'zip'
+    #     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId)-tfstate.zip'
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-tfstate.zip
       displayName: 'Upload Package'
       artifact: drop-tfstate

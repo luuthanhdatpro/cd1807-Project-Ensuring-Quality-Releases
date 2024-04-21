@@ -274,6 +274,7 @@ stages:
                 sudo apt-get install unzip -y
                 sudo apt-get install -y chromium-browser
                 pip install webdriver-manager
+                pip install webdriver_manager
                 pip3 install selenium
                 cd ~/
                 DIR=/home/devopsagent/app

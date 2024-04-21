@@ -1,0 +1,9 @@
+[2024-04-21 08:21:10] Starting the browser...
+[2024-04-21 08:21:11] Logging in...
+[2024-04-21 08:21:12] Login successful! Proceeding with tests.
+[2024-04-21 08:21:12] Adding items to cart...
+[2024-04-21 08:21:13] Items 'Sauce Labs Backpack', 'Sauce Labs Bike Light', 'Sauce Labs Bolt T-Shirt', 'Sauce Labs Fleece Jacket', 'Sauce Labs Onesie', 'Test.allTheThings() T-Shirt (Red)' added.
+[2024-04-21 08:21:13] Added 6 items to cart
+[2024-04-21 08:21:13] Removing items from cart
+[2024-04-21 08:21:13] Removed 6 items
+[2024-04-21 08:21:13] All Selenium test run successfully

@@ -295,7 +295,7 @@ stages:
                 cd $(Pipeline.Workspace)/drop-uitests
                 unzip -o $(Build.BuildId)-uitests.zip
                 echo "Starting Selenium Tests"
-                rm -rf /var/log/selenium
+                sudo rm -rf /var/log/selenium
                 sudo mkdir -p /var/log/selenium
                 sudo chmod 777 /var/log/selenium
                 python3 login.py 2>&1 | sudo tee -a /var/log/selenium/selenium.log
@@ -304,3 +304,8 @@ stages:
                 mkdir -p log/selenium
                 sudo cp /var/log/selenium/selenium.log log/selenium/selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."
+          - task: PublishPipelineArtifact@1
+            displayName: Publish Selenium Logs
+            inputs:
+              targetPath: '$(System.DefaultWorkingDirectory)/log/selenium/selenium-test.log'
+              artifactName: 'drop-selenium-logs'

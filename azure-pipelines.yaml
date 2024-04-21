@@ -235,7 +235,8 @@ stages:
                 wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
                 tar -xf apache-jmeter-5.6.3.tgz
                 unzip -o $(Build.BuildId)-perftests.zip
-                ./apache-jmeter-5.6.3/bin/jmeter -n -t PerformanceTestSuite.jmx -j jmeter.log -f
+                ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/EnduranceTest.jmx -j jmeter-endurance-test.log -f
+                ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/StressTest.jmx -j jmeter-stress-test.log -f
                 cat jmeter.log                                                                           # ToDo: Write your commands
               workingDirectory: $(Pipeline.Workspace)/drop-perftests            # ToDo: Use the artifact name from the task above
 
@@ -261,10 +262,14 @@ stages:
               script: |           
                 #! /bin/bash
                 
+                sudo apt-get update -y
                 sudo apt-get upgrade -y
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
                 sudo apt-get install -y chromium-browser
+                sudo apt-get install -y chromium-chromedriver
+                sudo apt-get install software-properties-common
+                sudo apt-get install -y python-selenium
                 pip3 install selenium
                 cd ~/
                 DIR=/home/devopsagent/app
@@ -283,7 +288,7 @@ stages:
                 fi
                 export PATH=$PATH:/home/devopsagent/app
                 echo "Starting Selenium Tests"
-                python3 login.py >> selenium.log
+                python3 add_remove_from_cart.py > selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."
 
   - job: CleanUp

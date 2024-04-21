@@ -273,9 +273,10 @@ stages:
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
                 sudo apt-get install -y chromium-browser
+                pip install --upgrade requests
                 pip install webdriver-manager
                 pip install webdriver_manager
-                pip3 install selenium
+                pip install selenium
                 cd ~/
                 DIR=/home/devopsagent/app
                 if [ ! -d "$DIR" ]; then

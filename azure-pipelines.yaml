@@ -213,7 +213,7 @@ stages:
   # ToDo: Provide <environment name> you created in your DevOps project
   - deployment: FakeRestAPI
     pool:
-      vmImage: 'Ubuntu-20.04'      
+      vmImage: 'Ubuntu-18.04'      
     environment: test-vm   # ToDo
     strategy:
       runOnce:
@@ -226,6 +226,7 @@ stages:
               appName: 'myApplication-AppService-2308'               # ToDo
               appType: webApp
               package: $(Pipeline.Workspace)/drop-fakerestapi/$(Build.BuildId)-fakerestapi.zip       # ToDo: Use the published zip artifact. 
+              deploymentMethod: zipDeploy
           #--------------------------------------------#    
           # Run JMeter test suite against the App Service
           - task: CmdLine@2

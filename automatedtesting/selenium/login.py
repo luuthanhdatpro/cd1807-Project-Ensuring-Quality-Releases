@@ -18,6 +18,7 @@ def login(user, password):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument('--remote-debugging-pipe')
+    options.add_argument('--single-proces')
     driver = webdriver.Chrome( options=options)
     driver.get('https://www.saucedemo.com/')
 

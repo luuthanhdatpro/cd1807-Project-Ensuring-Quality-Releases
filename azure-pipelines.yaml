@@ -242,11 +242,24 @@ stages:
         inputs:
           script: |
             wget "https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.tgz"
+            mkdir -p log/jmeter
             tar -xf apache-jmeter-5.6.3.tgz
-            ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/EnduranceTest.jmx -j jmeter-endurance-test.log -f
-            ./apache-jmeter-5.6.3/bin/jmeter -n -t test-suite/StressTest.jmx -j jmeter-stress-test.log -f
-          workingDirectory: $(System.DefaultWorkingDirectory)/automatedtesting/jmeter/
-        
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/EnduranceTest.jmx -j log/jmeter/jmeter-endurance-test.log -f -e -o log/jmeter/html-report
+            ./apache-jmeter-5.6.3/bin/jmeter -n -t automatedtesting/jmeter/test-suite/StressTest.jmx -j log/jmeter/jmeter-stress-test.log -f -e -o log/jmeter/html-report
+          workingDirectory: $(System.DefaultWorkingDirectory)
+      - task: ArchiveFiles@2
+        displayName: Save JMeter test report to artifact
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/log/jmeter/html-report'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(System.DefaultWorkingDirectory)/log/jmeter/html-report-$(Build.BuildId).zip'
+          verbose: true        
+      - task: PublishPipelineArtifact@1
+        displayName: Publish JMeter Logs
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/log/jmeter'
+          artifactName: 'drop-jmeter-logs'
 #   #--------------------------------------------#  
   # Selenium | Functional UI Tests
   # ToDo: 
@@ -278,23 +291,15 @@ stages:
                 pip install webdriver-manager
                 pip install webdriver_manager
                 pip install selenium
-                cd ~/
-                DIR=/home/devopsagent/app
-                if [ ! -d "$DIR" ]; then
-                    mkdir app
-                fi
-                mv /home/devopsagent/myagent/_work/1/drop-uitests/$(Build.BuildId)-uitests.zip app
-                cd app
+                cd $(Pipeline.Workspace)/drop-uitests
                 unzip -o $(Build.BuildId)-uitests.zip
-                FILE=/home/devopsagent/app/chromedriver_linux64.zip
-                if [ ! -f "$FILE" ]; then
-                    LATEST=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-                    wget http://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
-                    unzip -o chromedriver_linux64.zip
-                    sudo ln -s $PWD/chromedriver /usr/local/bin/chromedriver
-                fi
-                export PATH=$PATH:/home/devopsagent/app
                 echo "Starting Selenium Tests"
-                python3 login.py > selenium.log
-                cat selenium.log
+                rm -rf /var/log/selenium
+                sudo mkdir -p /var/log/selenium
+                sudo chmod 777 /var/log/seleniums
+                python3 login.py 2>&1 | sudo tee -a /var/log/selenium/selenium.log
+                cd $(System.DefaultWorkingDirectory)
+                rm -rf log/selenium
+                mkdir -p log/selenium
+                sudo cp /var/log/selenium/selenium.log log/selenium/selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."

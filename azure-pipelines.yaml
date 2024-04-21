@@ -235,7 +235,7 @@ stages:
         mergeTestResults: true
         testRunTitle: Publish test results     # ToDo
   
-  - job: Performance-Testing
+  - job: Performance_Testing
     displayName: JMeter Tests
     steps:
       - task: CmdLine@2

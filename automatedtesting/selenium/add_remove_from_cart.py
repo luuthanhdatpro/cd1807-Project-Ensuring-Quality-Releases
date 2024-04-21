@@ -5,6 +5,9 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
+def print_with_timestamp(message):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
 
 def add_items(driver):
     print_with_timestamp("Adding items to cart...")

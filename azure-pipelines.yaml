@@ -302,7 +302,7 @@ stages:
                 cd $(System.DefaultWorkingDirectory)
                 sudo rm -rf /log/selenium
                 sudo mkdir -p /log/selenium
-                sudo cp /var/log/selenium/selenium.log log/selenium/selenium.log
+                sudo cp /var/log/selenium/selenium.log log/selenium/
                 echo "Completed Selenium Tests. Check selenium.log for results."
           - task: PublishPipelineArtifact@1
             displayName: Publish Selenium Logs

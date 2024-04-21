@@ -17,7 +17,7 @@ def login(user, password):
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version='120').install()), options=options)
     driver.get('https://www.saucedemo.com/')
 
     print_with_timestamp('Logging in...')

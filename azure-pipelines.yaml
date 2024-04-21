@@ -273,6 +273,7 @@ stages:
                 sudo apt-get install python3-pip -y
                 sudo apt-get install unzip -y
                 sudo apt-get install -y chromium-browser
+                sudo apt install chromium
                 pip install --upgrade requests
                 pip install webdriver-manager
                 pip install webdriver_manager

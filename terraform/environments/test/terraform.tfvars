@@ -6,7 +6,7 @@ tenant_id = ""
 
 # Resource Group/Location
 location = "Southeast Asia"
-resource_group_name = "tfUdacity1"
+resource_group_name = "tfUdacity"
 application_type = "myApplication"
 
 # Network

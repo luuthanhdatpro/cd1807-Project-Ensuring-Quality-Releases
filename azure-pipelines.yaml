@@ -300,9 +300,9 @@ stages:
                 sudo chmod 777 /var/log/selenium
                 python3 login.py 2>&1 | sudo tee -a /var/log/selenium/selenium.log
                 cd $(System.DefaultWorkingDirectory)
-                sudo rm -rf /log/selenium
-                sudo mkdir -p /log/selenium
-                sudo cp /var/log/selenium/selenium.log log/selenium/
+                sudo rm -rf log/selenium
+                sudo mkdir -p log/selenium
+                sudo cp /var/log/selenium/selenium.log $(System.DefaultWorkingDirectory)/log/selenium/selenium.log
                 echo "Completed Selenium Tests. Check selenium.log for results."
           - task: PublishPipelineArtifact@1
             displayName: Publish Selenium Logs

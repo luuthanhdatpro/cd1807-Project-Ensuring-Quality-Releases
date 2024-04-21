@@ -2,7 +2,7 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-
+from selenium.webdriver.chrome import ChromeDriverManager
 
 def print_with_timestamp(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -14,7 +14,7 @@ def login(user, password):
     # --uncomment when running in Azure DevOps.
     options = ChromeOptions()
     options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager.install(),options=options)
     driver.get('https://www.saucedemo.com/')
 
     print_with_timestamp('Logging in...')
